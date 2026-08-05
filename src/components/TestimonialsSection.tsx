@@ -5,12 +5,18 @@ import { INITIAL_TESTIMONIALS } from '../data/initialData';
 
 interface TestimonialsSectionProps {
   testimonials?: Testimonial[];
+  showTestimonials?: boolean;
 }
 
-export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials }) => {
-  const list = testimonials && testimonials.length > 0 ? testimonials : INITIAL_TESTIMONIALS;
+export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
+  testimonials,
+  showTestimonials = true,
+}) => {
+  if (showTestimonials === false) return null;
 
-  if (list.length === 0) return null;
+  const list = testimonials !== undefined ? testimonials : INITIAL_TESTIMONIALS;
+
+  if (!list || list.length === 0) return null;
 
   return (
     <section className="py-10 border-t border-slate-200 dark:border-slate-800/80">

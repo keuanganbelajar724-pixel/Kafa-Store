@@ -13,12 +13,13 @@ import {
   addDoc
 } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
-import { LinkItem, StoreSettings, Testimonial, FreeWebTool } from '../types';
+import { LinkItem, StoreSettings, Testimonial, FreeWebTool, FaqItem } from '../types';
 import {
   INITIAL_ITEMS,
   INITIAL_SETTINGS,
   INITIAL_TESTIMONIALS,
-  INITIAL_FREE_TOOLS
+  INITIAL_FREE_TOOLS,
+  INITIAL_FAQS
 } from '../data/initialData';
 
 // Initialize Firebase App
@@ -70,6 +71,17 @@ export async function seedInitialFirestoreData() {
       });
       await batch.commit();
     }
+
+    const faqsSnap = await getDocs(collection(db, 'faqs'));
+    if (faqsSnap.empty) {
+      console.log('Seeding initial faqs to Firestore...');
+      const batch = writeBatch(db);
+      INITIAL_FAQS.forEach((faq) => {
+        const ref = doc(db, 'faqs', faq.id);
+        batch.set(ref, faq);
+      });
+      await batch.commit();
+    }
   } catch (err) {
     console.warn('Firestore seeding warning (will use local state as fallback):', err);
   }
@@ -95,6 +107,74 @@ export function subscribeProducts(callback: (items: LinkItem[]) => void) {
       console.warn('Firestore products subscription error:', error);
     }
   );
+}
+
+// Real-time listener for Testimonials
+export function subscribeTestimonials(callback: (testimonials: Testimonial[]) => void) {
+  const q = query(collection(db, 'testimonials'));
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const items: Testimonial[] = snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...(docSnap.data() as Omit<Testimonial, 'id'>)
+      }));
+      callback(items);
+    },
+    (error) => {
+      console.warn('Firestore testimonials subscription error:', error);
+    }
+  );
+}
+
+// Real-time listener for FAQs
+export function subscribeFaqs(callback: (faqs: FaqItem[]) => void) {
+  const q = query(collection(db, 'faqs'));
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const items: FaqItem[] = snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...(docSnap.data() as Omit<FaqItem, 'id'>)
+      }));
+      callback(items);
+    },
+    (error) => {
+      console.warn('Firestore faqs subscription error:', error);
+    }
+  );
+}
+
+// Save Testimonials to Firestore
+export async function saveTestimonialsToFirestore(testimonials: Testimonial[]) {
+  try {
+    const existingSnap = await getDocs(collection(db, 'testimonials'));
+    const batch = writeBatch(db);
+    existingSnap.docs.forEach((docSnap) => batch.delete(docSnap.ref));
+    testimonials.forEach((testi) => {
+      const ref = doc(db, 'testimonials', testi.id);
+      batch.set(ref, testi);
+    });
+    await batch.commit();
+  } catch (err) {
+    console.error('Failed to save testimonials to Firestore:', err);
+  }
+}
+
+// Save FAQs to Firestore
+export async function saveFaqsToFirestore(faqs: FaqItem[]) {
+  try {
+    const existingSnap = await getDocs(collection(db, 'faqs'));
+    const batch = writeBatch(db);
+    existingSnap.docs.forEach((docSnap) => batch.delete(docSnap.ref));
+    faqs.forEach((faq) => {
+      const ref = doc(db, 'faqs', faq.id);
+      batch.set(ref, faq);
+    });
+    await batch.commit();
+  } catch (err) {
+    console.error('Failed to save faqs to Firestore:', err);
+  }
 }
 
 // Real-time listener for Settings

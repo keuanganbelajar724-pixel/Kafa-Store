@@ -17,5 +17,8 @@ service cloud.firestore {
     match /freeTools/{document} {
       allow read, write: if true;
     }
+    match /faqs/{document} {
+      allow read, write: if true;
+    }
   }
 }

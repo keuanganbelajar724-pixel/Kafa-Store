@@ -34,6 +34,13 @@ export interface Testimonial {
   productTitle: string;
 }
 
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+  category: 'kelas' | 'ebook' | 'akses' | 'muamalah' | 'umum';
+}
+
 export interface CartItem {
   product: LinkItem;
   quantity: number;
@@ -92,9 +99,12 @@ export interface StoreSettings {
   stats?: HeroStat[];
   showPrayerTimes?: boolean;
   showFaq?: boolean;
+  showTestimonials?: boolean;
   showQuiz?: boolean;
   showGoldCalc?: boolean;
   showFreeTools?: boolean;
+  showCommunityBanner?: boolean;
+  communityGroupUrl?: string;
 }
 
 export interface CustomerDetails {

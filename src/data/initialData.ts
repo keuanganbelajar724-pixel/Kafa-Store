@@ -1,4 +1,4 @@
-import { LinkItem, StoreSettings, Testimonial, FreeWebTool } from '../types';
+import { LinkItem, StoreSettings, Testimonial, FreeWebTool, FaqItem } from '../types';
 
 export const INITIAL_SETTINGS: StoreSettings = {
   storeName: 'Sahabat Kafa',
@@ -32,10 +32,46 @@ export const INITIAL_SETTINGS: StoreSettings = {
   ],
   showPrayerTimes: false,
   showFaq: true,
+  showTestimonials: true,
   showQuiz: false,
   showGoldCalc: false,
   showFreeTools: true,
+  showCommunityBanner: true,
+  communityGroupUrl: '',
 };
+
+export const INITIAL_FAQS: FaqItem[] = [
+  {
+    id: 'faq-1',
+    question: 'Bagaimana cara beli / COD Emas Syariah Semarang di Sahabat Kafa?',
+    answer: 'Cukup pilih item Emas Syariah atau hubungi Admin via WhatsApp. Kami melayani transaksi COD (Cash on Delivery) langsung di Semarang dan sekitarnya dengan akad syariah Wakalah yang jelas & transparan.',
+    category: 'muamalah',
+  },
+  {
+    id: 'faq-2',
+    question: 'Apakah kelas animasi faceless cocok untuk pemula yang belum pernah edit video?',
+    answer: 'Sangat cocok! Semua materi dirancang bertahap dari pemahaman konsep dasar, penggunaan tools praktis di HP maupun laptop, hingga siap publikasi konten islami tanpa perlu tampil wajah.',
+    category: 'kelas',
+  },
+  {
+    id: 'faq-3',
+    question: 'Bagaimana cara mengakses e-book dan modul yang sudah dibeli?',
+    answer: 'Setelah melakukan konfirmasi checkout, Anda akan langsung dikirimkan link akses instan ke Google Drive / Portal Member via WhatsApp & Email resmi Sahabat Kafa.',
+    category: 'ebook',
+  },
+  {
+    id: 'faq-4',
+    question: 'Apakah akses materi berlaku selamanya (Lifetime Access)?',
+    answer: 'Ya, seluruh materi kelas, rekaman webinar, e-book, dan bonus template dapat Anda akses selamanya tanpa ada biaya langganan bulanan.',
+    category: 'akses',
+  },
+  {
+    id: 'faq-5',
+    question: 'Apakah ada grup konsultasi & pendampingan setelah belajar?',
+    answer: 'Tentu saja! Anda akan diundang masuk ke grup komunitas Telegram & WhatsApp eksklusif alumni Sahabat Kafa untuk bertanya jawab dan berdiskusi.',
+    category: 'kelas',
+  },
+];
 
 export const INITIAL_FREE_TOOLS: FreeWebTool[] = [
   {

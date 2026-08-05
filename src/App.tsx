@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LinkItem, CartItem, StoreSettings, Testimonial, OrderLead, FreeWebTool } from './types';
+import { LinkItem, CartItem, StoreSettings, Testimonial, OrderLead, FreeWebTool, FaqItem } from './types';
 import {
   getStoredSettings,
   saveStoredSettings,
@@ -11,6 +11,8 @@ import {
   saveStoredOrders,
   getStoredFreeTools,
   saveStoredFreeTools,
+  getStoredFaqs,
+  saveStoredFaqs,
   resetToDefaultData,
 } from './utils/storage';
 
@@ -22,6 +24,7 @@ import { ProductGrid } from './components/ProductGrid';
 import { FreeToolsSection } from './components/FreeToolsSection';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { FaqSection } from './components/FaqSection';
+import { CommunityBanner } from './components/CommunityBanner';
 import { RecommendationQuiz } from './components/RecommendationQuiz';
 import { GoldCalculatorModal } from './components/GoldCalculatorModal';
 import { ZakatCalculatorModal } from './components/ZakatCalculatorModal';
@@ -39,8 +42,12 @@ import {
   seedInitialFirestoreData,
   subscribeProducts,
   subscribeSettings,
+  subscribeTestimonials,
+  subscribeFaqs,
   saveProductToFirestore,
   saveSettingsToFirestore,
+  saveTestimonialsToFirestore,
+  saveFaqsToFirestore,
   logOrderToFirestore
 } from './lib/firebase';
 
@@ -48,6 +55,7 @@ export default function App() {
   const [settings, setSettings] = useState<StoreSettings>(getStoredSettings());
   const [items, setItems] = useState<LinkItem[]>(getStoredItems());
   const [testimonials, setTestimonials] = useState<Testimonial[]>(getStoredTestimonials());
+  const [faqs, setFaqs] = useState<FaqItem[]>(getStoredFaqs());
   const [orders, setOrders] = useState<OrderLead[]>(getStoredOrders());
   const [freeTools, setFreeTools] = useState<FreeWebTool[]>(getStoredFreeTools());
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -137,9 +145,25 @@ export default function App() {
       }
     });
 
+    // Subscribe to real-time testimonials
+    const unsubTestis = subscribeTestimonials((firestoreTestis) => {
+      if (firestoreTestis) {
+        setTestimonials(firestoreTestis);
+      }
+    });
+
+    // Subscribe to real-time FAQs
+    const unsubFaqs = subscribeFaqs((firestoreFaqs) => {
+      if (firestoreFaqs && firestoreFaqs.length > 0) {
+        setFaqs(firestoreFaqs);
+      }
+    });
+
     return () => {
       unsubProducts();
       unsubSettings();
+      unsubTestis();
+      unsubFaqs();
     };
   }, []);
 
@@ -159,6 +183,13 @@ export default function App() {
   const handleSaveTestimonials = (newTestis: Testimonial[]) => {
     setTestimonials(newTestis);
     saveStoredTestimonials(newTestis);
+    saveTestimonialsToFirestore(newTestis);
+  };
+
+  const handleSaveFaqs = (newFaqs: FaqItem[]) => {
+    setFaqs(newFaqs);
+    saveStoredFaqs(newFaqs);
+    saveFaqsToFirestore(newFaqs);
   };
 
   const handleSaveOrders = (newOrders: OrderLead[]) => {
@@ -172,11 +203,12 @@ export default function App() {
   };
 
   const handleResetData = () => {
-    const { settings: defSet, items: defItems, testimonials: defTestis, freeTools: defTools } = resetToDefaultData();
+    const { settings: defSet, items: defItems, testimonials: defTestis, freeTools: defTools, faqs: defFaqs } = resetToDefaultData();
     setSettings(defSet);
     setItems(defItems);
     setTestimonials(defTestis);
     setFreeTools(defTools);
+    setFaqs(defFaqs);
     setOrders([]);
     setCart([]);
   };
@@ -420,11 +452,14 @@ export default function App() {
           </div>
         )}
 
+        {/* Community & Admin Consultation Banner */}
+        <CommunityBanner settings={settings} />
+
         {/* Testimonials Social Proof */}
-        <TestimonialsSection testimonials={testimonials} />
+        <TestimonialsSection testimonials={testimonials} showTestimonials={settings.showTestimonials} />
 
         {/* FAQ Section */}
-        {settings.showFaq !== false && <FaqSection />}
+        {settings.showFaq !== false && <FaqSection faqs={faqs} />}
 
         {/* Footer */}
         <Footer
@@ -512,11 +547,13 @@ export default function App() {
         testimonials={testimonials}
         orders={orders}
         freeTools={freeTools}
+        faqs={faqs}
         onSaveItems={handleSaveItems}
         onSaveSettings={handleSaveSettings}
         onSaveTestimonials={handleSaveTestimonials}
         onSaveOrders={handleSaveOrders}
         onSaveFreeTools={handleSaveFreeTools}
+        onSaveFaqs={handleSaveFaqs}
         onResetData={handleResetData}
         onLogout={handleLogoutAdmin}
       />

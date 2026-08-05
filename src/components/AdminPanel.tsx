@@ -30,7 +30,8 @@ import {
   Wrench,
   BookOpen,
   Calculator,
-  Compass
+  Compass,
+  HelpCircle
 } from 'lucide-react';
 import {
   LinkItem,
@@ -41,7 +42,8 @@ import {
   ItemType,
   ThemeBackground,
   HeroStat,
-  FreeWebTool
+  FreeWebTool,
+  FaqItem
 } from '../types';
 import { Badge } from './Badge';
 import { formatRupiah } from '../utils/storage';
@@ -54,11 +56,13 @@ interface AdminPanelProps {
   testimonials: Testimonial[];
   orders: OrderLead[];
   freeTools?: FreeWebTool[];
+  faqs?: FaqItem[];
   onSaveItems: (items: LinkItem[]) => void;
   onSaveSettings: (settings: StoreSettings) => void;
   onSaveTestimonials: (testimonials: Testimonial[]) => void;
   onSaveOrders: (orders: OrderLead[]) => void;
   onSaveFreeTools?: (tools: FreeWebTool[]) => void;
+  onSaveFaqs?: (faqs: FaqItem[]) => void;
   onResetData: () => void;
   onLogout: () => void;
 }
@@ -71,15 +75,17 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   testimonials,
   orders,
   freeTools = [],
+  faqs = [],
   onSaveItems,
   onSaveSettings,
   onSaveTestimonials,
   onSaveOrders,
   onSaveFreeTools,
+  onSaveFaqs,
   onResetData,
   onLogout,
 }) => {
-  const [activeTab, setActiveTab] = useState<'items' | 'hero' | 'freetools' | 'testimonials' | 'settings' | 'orders' | 'theme'>('items');
+  const [activeTab, setActiveTab] = useState<'items' | 'hero' | 'freetools' | 'testimonials' | 'faq' | 'settings' | 'orders' | 'theme'>('items');
 
   // ITEM Form State
   const [editingItem, setEditingItem] = useState<Partial<LinkItem> | null>(null);
@@ -92,6 +98,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   // TESTIMONIAL Form State
   const [editingTesti, setEditingTesti] = useState<Partial<Testimonial> | null>(null);
   const [isTestiFormOpen, setIsTestiFormOpen] = useState(false);
+
+  // FAQ Form State
+  const [editingFaq, setEditingFaq] = useState<Partial<FaqItem> | null>(null);
+  const [isFaqFormOpen, setIsFaqFormOpen] = useState(false);
 
   // Settings Local State
   const [localSettings, setLocalSettings] = useState<StoreSettings>({ ...settings });
@@ -293,6 +303,55 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     }
   };
 
+  // --- FAQ CRUD HANDLERS ---
+  const handleOpenAddFaq = () => {
+    setEditingFaq({
+      id: `faq-${Date.now()}`,
+      question: '',
+      answer: '',
+      category: 'kelas',
+    });
+    setIsFaqFormOpen(true);
+  };
+
+  const handleOpenEditFaq = (faq: FaqItem) => {
+    setEditingFaq({ ...faq });
+    setIsFaqFormOpen(true);
+  };
+
+  const handleSaveFaq = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingFaq || !editingFaq.question || !editingFaq.answer) return;
+
+    const currentFaqs = faqs || [];
+    const exists = currentFaqs.some((f) => f.id === editingFaq.id);
+    let updated: FaqItem[];
+
+    if (exists) {
+      updated = currentFaqs.map((f) => (f.id === editingFaq.id ? (editingFaq as FaqItem) : f));
+    } else {
+      updated = [...currentFaqs, editingFaq as FaqItem];
+    }
+
+    if (onSaveFaqs) {
+      onSaveFaqs(updated);
+    }
+    setIsFaqFormOpen(false);
+    setEditingFaq(null);
+    showTempMessage('FAQ berhasil disimpan!');
+  };
+
+  const handleDeleteFaq = (id: string) => {
+    if (confirm('Apakah Anda yakin ingin menghapus pertanyaan FAQ ini?')) {
+      const currentFaqs = faqs || [];
+      const updated = currentFaqs.filter((f) => f.id !== id);
+      if (onSaveFaqs) {
+        onSaveFaqs(updated);
+      }
+      showTempMessage('FAQ berhasil dihapus');
+    }
+  };
+
   // --- SETTINGS FORM SAVE ---
   const handleSaveSettingsForm = (e: React.FormEvent) => {
     e.preventDefault();
@@ -415,6 +474,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           >
             <Quote className="w-4 h-4" />
             <span>Testimoni ({testimonials.length})</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('faq')}
+            className={`px-3.5 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition-all ${
+              activeTab === 'faq'
+                ? 'bg-white dark:bg-slate-900 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
+                : 'border-transparent text-slate-500 hover:text-white'
+            }`}
+          >
+            <HelpCircle className="w-4 h-4 text-emerald-500" />
+            <span>FAQ ({faqs.length})</span>
           </button>
 
           <button
@@ -903,6 +974,76 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             </div>
           )}
 
+          {/* TAB: FAQ MANAGEMENT */}
+          {activeTab === 'faq' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                    Kelola Pertanyaan Sering Diajukan (FAQ)
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    Tambah, edit, atau hapus daftar pertanyaan & jawaban yang muncul di section FAQ.
+                  </p>
+                </div>
+
+                <button
+                  onClick={handleOpenAddFaq}
+                  className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs flex items-center gap-2 shadow-lg shadow-emerald-600/20"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>+ Tambah Pertanyaan FAQ</span>
+                </button>
+              </div>
+
+              <div className="space-y-3 pt-2">
+                {faqs.map((faq) => (
+                  <div
+                    key={faq.id}
+                    className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-start justify-between gap-4"
+                  >
+                    <div className="space-y-1.5 min-w-0 flex-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs font-black text-slate-900 dark:text-white">
+                          {faq.question}
+                        </span>
+                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                          {faq.category}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                        {faq.answer}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0 self-end sm:self-start">
+                      <button
+                        onClick={() => handleOpenEditFaq(faq)}
+                        className="p-2 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 transition-colors"
+                        title="Edit FAQ"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteFaq(faq.id)}
+                        className="p-2 rounded-xl bg-rose-500/10 hover:bg-rose-500 text-rose-500 hover:text-white transition-colors"
+                        title="Hapus FAQ"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                {faqs.length === 0 && (
+                  <div className="text-center py-12 text-slate-500 text-xs border border-dashed border-slate-300 dark:border-slate-800 rounded-2xl">
+                    Belum ada pertanyaan FAQ. Klik tombol "+ Tambah Pertanyaan FAQ" di atas untuk menambahkan.
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* TAB 4: WHATSAPP & STORE SETTINGS */}
           {activeTab === 'settings' && (
             <form onSubmit={handleSaveSettingsForm} className="space-y-6 max-w-2xl">
@@ -931,6 +1072,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   <span className="text-[10px] text-slate-400">Pastikan diawali dengan 62 (contoh: 6281234567890).</span>
                 </div>
 
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Link Grup WhatsApp / Telegram Komunitas Sahabat Kafa (Opsional)
+                  </label>
+                  <input
+                    type="url"
+                    value={localSettings.communityGroupUrl || ''}
+                    onChange={(e) => setLocalSettings({ ...localSettings, communityGroupUrl: e.target.value })}
+                    placeholder="https://chat.whatsapp.com/... atau https://t.me/..."
+                    className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+                  />
+                  <span className="text-[10px] text-slate-400">Jika dikosongkan, tombol Gabung Grup akan otomatis mengarahkan ke WhatsApp Admin dengan pesan gabung grup.</span>
+                </div>
+
                 {/* Feature Toggles Center */}
                 <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-3">
                   <h4 className="text-xs font-black uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
@@ -943,13 +1098,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                     <label className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer">
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                        🕌 Jam & Widget Jadwal Sholat
+                        💬 Section Testimoni & Ulasan
                       </span>
                       <input
                         type="checkbox"
-                        checked={localSettings.showPrayerTimes !== false}
+                        checked={localSettings.showTestimonials !== false}
                         onChange={(e) =>
-                          setLocalSettings({ ...localSettings, showPrayerTimes: e.target.checked })
+                          setLocalSettings({ ...localSettings, showTestimonials: e.target.checked })
                         }
                         className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
                       />
@@ -969,25 +1124,27 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                     <label className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer">
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                        🎯 Kuis Rekomendasi Paket
+                        👥 Banner Komunitas & Tanya Admin
                       </span>
                       <input
                         type="checkbox"
-                        checked={localSettings.showQuiz !== false}
-                        onChange={(e) => setLocalSettings({ ...localSettings, showQuiz: e.target.checked })}
+                        checked={localSettings.showCommunityBanner !== false}
+                        onChange={(e) =>
+                          setLocalSettings({ ...localSettings, showCommunityBanner: e.target.checked })
+                        }
                         className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
                       />
                     </label>
 
                     <label className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer">
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                        📊 Kalkulator Emas & Income
+                        🌐 Section Web & Tool Gratis
                       </span>
                       <input
                         type="checkbox"
-                        checked={localSettings.showGoldCalc !== false}
+                        checked={localSettings.showFreeTools !== false}
                         onChange={(e) =>
-                          setLocalSettings({ ...localSettings, showGoldCalc: e.target.checked })
+                          setLocalSettings({ ...localSettings, showFreeTools: e.target.checked })
                         }
                         className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
                       />
@@ -1788,6 +1945,90 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   className="px-5 py-2 rounded-xl text-xs font-extrabold bg-emerald-600 text-white shadow-md"
                 >
                   Simpan Web Gratis
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* FAQ MODAL FORM */}
+      {isFaqFormOpen && editingFaq && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
+          <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+              <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">
+                {faqs.some((f) => f.id === editingFaq.id) ? 'Edit Pertanyaan FAQ' : 'Tambah FAQ Baru'}
+              </h3>
+              <button
+                onClick={() => setIsFaqFormOpen(false)}
+                className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveFaq} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  Pertanyaan *
+                </label>
+                <input
+                  type="text"
+                  value={editingFaq.question || ''}
+                  onChange={(e) => setEditingFaq({ ...editingFaq, question: e.target.value })}
+                  placeholder="Contoh: Apakah kelas ini cocok untuk pemula?"
+                  className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  Jawaban Lengkap *
+                </label>
+                <textarea
+                  rows={4}
+                  value={editingFaq.answer || ''}
+                  onChange={(e) => setEditingFaq({ ...editingFaq, answer: e.target.value })}
+                  placeholder="Tuliskan jawaban yang lengkap dan jelas..."
+                  className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  Kategori FAQ
+                </label>
+                <select
+                  value={editingFaq.category || 'kelas'}
+                  onChange={(e) =>
+                    setEditingFaq({ ...editingFaq, category: e.target.value as any })
+                  }
+                  className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+                >
+                  <option value="kelas">🎬 Kelas Animasi</option>
+                  <option value="ebook">📚 E-book & Printable</option>
+                  <option value="akses">🔑 Akses & Garansi</option>
+                  <option value="muamalah">🛡️ Muamalah & Emas</option>
+                  <option value="umum">💡 Umum</option>
+                </select>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setIsFaqFormOpen(false)}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs shadow-md shadow-emerald-600/20"
+                >
+                  Simpan FAQ
                 </button>
               </div>
             </form>

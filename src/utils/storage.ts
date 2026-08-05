@@ -1,11 +1,12 @@
-import { LinkItem, StoreSettings, Testimonial, OrderLead, FreeWebTool } from '../types';
-import { INITIAL_ITEMS, INITIAL_SETTINGS, INITIAL_TESTIMONIALS, INITIAL_FREE_TOOLS } from '../data/initialData';
+import { LinkItem, StoreSettings, Testimonial, OrderLead, FreeWebTool, FaqItem } from '../types';
+import { INITIAL_ITEMS, INITIAL_SETTINGS, INITIAL_TESTIMONIALS, INITIAL_FREE_TOOLS, INITIAL_FAQS } from '../data/initialData';
 
 const SETTINGS_KEY = 'sahabat_kafa_settings_v1';
 const ITEMS_KEY = 'sahabat_kafa_items_v1';
 const TESTIMONIALS_KEY = 'sahabat_kafa_testimonials_v1';
 const ORDERS_KEY = 'sahabat_kafa_orders_v1';
 const FREE_TOOLS_KEY = 'sahabat_kafa_free_tools_v1';
+const FAQS_KEY = 'sahabat_kafa_faqs_v1';
 
 export function getStoredSettings(): StoreSettings {
   try {
@@ -32,7 +33,7 @@ export function getStoredItems(): LinkItem[] {
     const data = localStorage.getItem(ITEMS_KEY);
     if (data) {
       const parsed = JSON.parse(data);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return parsed;
       }
     }
@@ -53,9 +54,9 @@ export function saveStoredItems(items: LinkItem[]): void {
 export function getStoredTestimonials(): Testimonial[] {
   try {
     const data = localStorage.getItem(TESTIMONIALS_KEY);
-    if (data) {
+    if (data !== null) {
       const parsed = JSON.parse(data);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return parsed;
       }
     }
@@ -76,9 +77,9 @@ export function saveStoredTestimonials(testimonials: Testimonial[]): void {
 export function getStoredFreeTools(): FreeWebTool[] {
   try {
     const data = localStorage.getItem(FREE_TOOLS_KEY);
-    if (data) {
+    if (data !== null) {
       const parsed = JSON.parse(data);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
         return parsed;
       }
     }
@@ -93,6 +94,29 @@ export function saveStoredFreeTools(tools: FreeWebTool[]): void {
     localStorage.setItem(FREE_TOOLS_KEY, JSON.stringify(tools));
   } catch (e) {
     console.error('Error saving free tools to localStorage', e);
+  }
+}
+
+export function getStoredFaqs(): FaqItem[] {
+  try {
+    const data = localStorage.getItem(FAQS_KEY);
+    if (data !== null) {
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.error('Error loading faqs from localStorage', e);
+  }
+  return INITIAL_FAQS;
+}
+
+export function saveStoredFaqs(faqs: FaqItem[]): void {
+  try {
+    localStorage.setItem(FAQS_KEY, JSON.stringify(faqs));
+  } catch (e) {
+    console.error('Error saving faqs to localStorage', e);
   }
 }
 
@@ -139,17 +163,20 @@ export function resetToDefaultData(): {
   items: LinkItem[];
   testimonials: Testimonial[];
   freeTools: FreeWebTool[];
+  faqs: FaqItem[];
 } {
   saveStoredSettings(INITIAL_SETTINGS);
   saveStoredItems(INITIAL_ITEMS);
   saveStoredTestimonials(INITIAL_TESTIMONIALS);
   saveStoredFreeTools(INITIAL_FREE_TOOLS);
+  saveStoredFaqs(INITIAL_FAQS);
   saveStoredOrders([]);
   return {
     settings: INITIAL_SETTINGS,
     items: INITIAL_ITEMS,
     testimonials: INITIAL_TESTIMONIALS,
     freeTools: INITIAL_FREE_TOOLS,
+    faqs: INITIAL_FAQS,
   };
 }
 

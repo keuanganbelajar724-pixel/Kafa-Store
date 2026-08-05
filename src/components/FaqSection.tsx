@@ -1,57 +1,19 @@
 import React, { useState } from 'react';
-import { HelpCircle, ChevronDown, Search, MessageCircle, Sparkles } from 'lucide-react';
+import { HelpCircle, ChevronDown, Search, MessageCircle } from 'lucide-react';
+import { FaqItem } from '../types';
+import { INITIAL_FAQS } from '../data/initialData';
 
-interface FaqItem {
-  id: string;
-  question: string;
-  answer: string;
-  category: 'kelas' | 'ebook' | 'akses' | 'muamalah';
+interface FaqSectionProps {
+  faqs?: FaqItem[];
 }
 
-const FAQ_LIST: FaqItem[] = [
-  {
-    id: '1',
-    question: 'Apakah kelas animasi faceless cocok untuk pemula yang belum pernah edit video?',
-    answer:
-      'Sangat cocok! Semua materi dirancang bertahap dari pemahaman konsep dasar, penggunaan tools praktis di HP maupun laptop, hingga siap publikasi konten islami tanpa perlu tampil wajah.',
-    category: 'kelas',
-  },
-  {
-    id: '2',
-    question: 'Bagaimana cara mengakses e-book dan modul yang sudah dibeli?',
-    answer:
-      'Setelah melakukan konfirmasi checkout, Anda akan langsung dikirimkan link akses instan ke Google Drive / Portal Member via WhatsApp & Email resmi Sahabat Kafa.',
-    category: 'ebook',
-  },
-  {
-    id: '3',
-    question: 'Apakah akses materi berlaku selamanya (Lifetime Access)?',
-    answer:
-      'Ya, seluruh materi kelas, rekaman webinar, e-book, dan bonus template dapat Anda akses selamanya tanpa ada biaya langganan bulanan.',
-    category: 'akses',
-  },
-  {
-    id: '4',
-    question: 'Apakah ada grup konsultasi & pendampingan setelah belajar?',
-    answer:
-      'Tentu saja! Anda akan diundang masuk ke grup komunitas Telegram & WhatsApp eksklusif alumni Sahabat Kafa untuk bertanya jawab dan berdiskusi.',
-    category: 'kelas',
-  },
-  {
-    id: '5',
-    question: 'Bagaimana keamanan transaksi & akad muamalah pembelian?',
-    answer:
-      'Transaksi dilakukan secara transparan, halal, dan bebas dari unsur gharar. Pembayaran dapat melalui transfer bank atau QRIS resmi.',
-    category: 'muamalah',
-  },
-];
-
-export const FaqSection: React.FC = () => {
-  const [openId, setOpenId] = useState<string | null>('1');
+export const FaqSection: React.FC<FaqSectionProps> = ({ faqs }) => {
+  const faqList = faqs && faqs.length > 0 ? faqs : INITIAL_FAQS;
+  const [openId, setOpenId] = useState<string | null>(faqList[0]?.id || null);
   const [search, setSearch] = useState<string>('');
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
-  const filteredFaqs = FAQ_LIST.filter((item) => {
+  const filteredFaqs = faqList.filter((item) => {
     const matchesSearch =
       item.question.toLowerCase().includes(search.toLowerCase()) ||
       item.answer.toLowerCase().includes(search.toLowerCase());
