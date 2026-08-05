@@ -2,6 +2,7 @@ import React from 'react';
 import { Sparkles, ShieldCheck, Zap, Star, Share2, MessageCircle } from 'lucide-react';
 import { StoreSettings } from '../types';
 import { MosqueAmbientBackground } from './MosqueAmbientBackground';
+import { LiveClockWidget } from './LiveClockWidget';
 
 interface HeroSectionProps {
   settings: StoreSettings;
@@ -34,6 +35,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <span>SAHABAT KAFA OFFICIAL WEBSITE</span>
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
         </div>
+
+        {/* Live Interactive Date & Digital Clock Widget */}
+        {settings.showLiveClock !== false && <LiveClockWidget />}
 
         {/* Main Headline */}
         <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.15] max-w-3xl mx-auto drop-shadow-sm">

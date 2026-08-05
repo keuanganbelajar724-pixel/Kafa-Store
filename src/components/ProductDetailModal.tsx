@@ -62,7 +62,7 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 <span className="text-slate-300">• {item.salesCount}+ Terjual</span>
               )}
             </div>
-            <h2 className="text-xl sm:text-2xl font-black leading-tight">{item.title}</h2>
+            <h2 className="text-xl sm:text-2xl font-black leading-tight break-words whitespace-normal drop-shadow-md">{item.title}</h2>
           </div>
         </div>
 

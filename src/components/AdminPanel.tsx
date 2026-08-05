@@ -1124,6 +1124,20 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                     <label className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer">
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                        ⏰ Jam & Tanggal Live Interaktif
+                      </span>
+                      <input
+                        type="checkbox"
+                        checked={localSettings.showLiveClock !== false}
+                        onChange={(e) =>
+                          setLocalSettings({ ...localSettings, showLiveClock: e.target.checked })
+                        }
+                        className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
+                      />
+                    </label>
+
+                    <label className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer">
+                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                         👥 Banner Komunitas & Tanya Admin
                       </span>
                       <input

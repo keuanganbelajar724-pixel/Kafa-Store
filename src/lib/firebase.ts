@@ -93,15 +93,13 @@ export function subscribeProducts(callback: (items: LinkItem[]) => void) {
   return onSnapshot(
     q,
     (snapshot) => {
-      if (!snapshot.empty) {
-        const items: LinkItem[] = snapshot.docs.map((docSnap) => ({
-          id: docSnap.id,
-          ...(docSnap.data() as Omit<LinkItem, 'id'>)
-        }));
-        // Sort by order or isPinned
-        items.sort((a, b) => (a.order || 99) - (b.order || 99));
-        callback(items);
-      }
+      const items: LinkItem[] = snapshot.docs.map((docSnap) => ({
+        id: docSnap.id,
+        ...(docSnap.data() as Omit<LinkItem, 'id'>)
+      }));
+      // Sort by order or isPinned
+      items.sort((a, b) => (a.order || 99) - (b.order || 99));
+      callback(items);
     },
     (error) => {
       console.warn('Firestore products subscription error:', error);

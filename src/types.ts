@@ -105,6 +105,7 @@ export interface StoreSettings {
   showFreeTools?: boolean;
   showCommunityBanner?: boolean;
   communityGroupUrl?: string;
+  showLiveClock?: boolean;
 }
 
 export interface CustomerDetails {

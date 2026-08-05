@@ -54,7 +54,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
       {/* Content Info */}
       <div className="flex-1 text-left w-full min-w-0">
         <div className="flex items-center gap-2 mb-1 flex-wrap">
-          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white break-words whitespace-normal leading-snug group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
             {item.title}
           </h3>
 
@@ -66,7 +66,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
         </div>
 
         {item.subtitle && (
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 line-clamp-2 mb-2">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 break-words whitespace-normal leading-relaxed mb-2">
             {item.subtitle}
           </p>
         )}

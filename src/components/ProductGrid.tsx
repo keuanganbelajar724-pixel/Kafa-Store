@@ -32,7 +32,19 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
 }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  if (items.length === 0) return null;
+  if (items.length === 0) {
+    return (
+      <div className="p-8 sm:p-12 text-center bg-white/80 dark:bg-slate-900/80 rounded-3xl border border-dashed border-slate-300 dark:border-slate-800 shadow-sm space-y-3">
+        <div className="w-14 h-14 mx-auto rounded-2xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+          <ShoppingBag className="w-7 h-7" />
+        </div>
+        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Katalog Produk Masih Kosong</h3>
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+          Belum ada produk yang ditampilkan. Anda dapat menambahkan produk, e-book, atau layanan baru secara manual melalui Panel Admin Sahabat Kafa.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -145,12 +157,12 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
                 {/* Content Details */}
                 <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                   <div>
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white light:text-slate-900 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-2">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white light:text-slate-900 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors break-words whitespace-normal leading-snug">
                       {item.title}
                     </h3>
 
                     {item.subtitle && (
-                      <p className="text-xs text-slate-600 dark:text-slate-300 light:text-slate-600 line-clamp-2 mt-1.5 leading-relaxed">
+                      <p className="text-xs text-slate-600 dark:text-slate-300 light:text-slate-600 break-words whitespace-normal mt-1.5 leading-relaxed">
                         {item.subtitle}
                       </p>
                     )}
@@ -158,10 +170,10 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
                     {/* Features checklist bullet preview */}
                     {item.features && item.features.length > 0 && (
                       <div className="mt-3 space-y-1">
-                        {item.features.slice(0, 2).map((feat, idx) => (
-                          <div key={idx} className="flex items-center gap-1.5 text-[11px] text-slate-700 dark:text-slate-300 light:text-slate-700">
-                            <CheckCircle className="w-3 h-3 text-emerald-600 dark:text-emerald-400 light:text-emerald-600 shrink-0" />
-                            <span className="truncate">{feat}</span>
+                        {item.features.slice(0, 3).map((feat, idx) => (
+                          <div key={idx} className="flex items-start gap-1.5 text-[11px] text-slate-700 dark:text-slate-300 light:text-slate-700">
+                            <CheckCircle className="w-3 h-3 text-emerald-600 dark:text-emerald-400 light:text-emerald-600 shrink-0 mt-0.5" />
+                            <span className="break-words leading-tight">{feat}</span>
                           </div>
                         ))}
                       </div>
@@ -235,7 +247,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
 
                 <div className="flex-1 min-w-0 text-left w-full">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white light:text-slate-900 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white light:text-slate-900 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors break-words whitespace-normal leading-snug">
                       {item.title}
                     </h3>
                     {item.badge && (
@@ -246,7 +258,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
                   </div>
 
                   {item.subtitle && (
-                    <p className="text-xs text-slate-600 dark:text-slate-300 light:text-slate-600 line-clamp-1 mt-0.5">{item.subtitle}</p>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 light:text-slate-600 break-words whitespace-normal mt-0.5 leading-relaxed">{item.subtitle}</p>
                   )}
 
                   {isProduct && (
