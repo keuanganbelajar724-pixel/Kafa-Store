@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LinkItem, CartItem, StoreSettings, Testimonial, OrderLead, FreeWebTool, FaqItem } from './types';
+import { DEMO_ITEMS } from './data/initialData';
 import {
   getStoredSettings,
   saveStoredSettings,
@@ -89,6 +90,17 @@ export default function App() {
       document.documentElement.classList.add('light');
     }
   }, [isDarkMode]);
+
+  // Sync isDarkMode with themeBackground whenever themeBackground changes
+  useEffect(() => {
+    if (settings.themeBackground === 'clean-light') {
+      setIsDarkMode(false);
+      localStorage.setItem('sahabat_kafa_theme_mode', 'light');
+    } else if (['luxury-dark', 'emerald-gold', 'cosmic-earth'].includes(settings.themeBackground)) {
+      setIsDarkMode(true);
+      localStorage.setItem('sahabat_kafa_theme_mode', 'dark');
+    }
+  }, [settings.themeBackground]);
 
   // Filtering & Navigation Tab State
   const [activeMainTab, setActiveMainTab] = useState<'katalog' | 'web-gratis'>('katalog');
@@ -229,8 +241,17 @@ export default function App() {
   };
 
   const handleBuyNow = (product: LinkItem) => {
-    handleAddToCart(product);
-    setIsCartOpen(true);
+    if (product.url && product.url.trim().length > 0) {
+      let targetUrl = product.url.trim();
+      if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+        targetUrl = 'https://' + targetUrl;
+      }
+      window.open(targetUrl, '_blank', 'noopener,noreferrer');
+    } else {
+      const cleanWa = settings.whatsappNumber.replace(/[^0-9]/g, '');
+      const waMessage = encodeURIComponent(`Halo, saya ingin memesan/membeli ${product.title}`);
+      window.open(`https://wa.me/${cleanWa}?text=${waMessage}`, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const handleUpdateCartQuantity = (productId: string, delta: number) => {
@@ -314,17 +335,15 @@ export default function App() {
 
   const getThemeBackgroundClass = () => {
     if (!isDarkMode) {
-      return 'bg-slate-100 text-slate-900';
+      return 'bg-slate-50 text-slate-900';
     }
     switch (settings.themeBackground) {
-      case 'luxury-dark':
-        return 'bg-slate-950 text-slate-100';
       case 'emerald-gold':
-        return 'bg-gradient-to-b from-slate-950 via-teal-950 to-emerald-950 text-slate-100';
+        return 'bg-gradient-to-b from-slate-950 via-emerald-950 to-teal-950 text-slate-100';
       case 'cosmic-earth':
         return 'bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950 text-slate-100';
+      case 'luxury-dark':
       case 'clean-light':
-        return 'bg-slate-900 text-slate-100';
       default:
         return 'bg-slate-950 text-slate-100';
     }
@@ -371,7 +390,7 @@ export default function App() {
       />
 
       {/* Live International Market & Gold Ticker */}
-      <InternationalTickerBar currency={currency} lang={lang} />
+      <InternationalTickerBar currency={currency} lang={lang} settings={settings} />
 
       {/* Hero Header Section */}
       <HeroSection
@@ -427,6 +446,8 @@ export default function App() {
               onViewDetail={(item) => setDetailProduct(item)}
               onAddToCart={handleAddToCart}
               onBuyNow={handleBuyNow}
+              onOpenAdminPanel={() => setIsAdminPanelOpen(true)}
+              onLoadSampleData={() => handleSaveItems(DEMO_ITEMS)}
             />
 
             {/* Free Tools ecosystem rendered once */}
@@ -459,7 +480,7 @@ export default function App() {
         <TestimonialsSection testimonials={testimonials} showTestimonials={settings.showTestimonials} />
 
         {/* FAQ Section */}
-        {settings.showFaq !== false && <FaqSection faqs={faqs} />}
+        {settings.showFaq !== false && <FaqSection faqs={faqs} whatsappNumber={settings.whatsappNumber} />}
 
         {/* Footer */}
         <Footer

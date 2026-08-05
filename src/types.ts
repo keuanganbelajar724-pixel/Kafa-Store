@@ -79,6 +79,11 @@ export interface FreeWebTool {
 export interface StoreSettings {
   storeName: string;
   tagline: string;
+  headerWaText?: string;
+  tickerItem1?: string;
+  tickerItem2?: string;
+  tickerItem3?: string;
+  tickerItem4?: string;
   bio: string;
   avatarUrl: string;
   whatsappNumber: string;

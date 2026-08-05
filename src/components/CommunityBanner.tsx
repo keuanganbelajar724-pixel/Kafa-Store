@@ -59,12 +59,12 @@ export const CommunityBanner: React.FC<CommunityBannerProps> = ({ settings }) =>
         {/* Right Column: CTA Buttons */}
         <div className="lg:col-span-5 flex flex-col justify-center gap-4 bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-sm">
           <div className="text-center sm:text-left">
-            <h3 className="text-lg font-bold text-white flex items-center justify-center sm:justify-start gap-2">
-              <HelpCircle className="w-5 h-5 text-emerald-400" />
-              <span>Hubungi Kami Sekarang</span>
+            <h3 className="text-xl font-black text-white flex items-center justify-center sm:justify-start gap-2">
+              <HelpCircle className="w-6 h-6 text-emerald-400" />
+              <span>KONSULTASI GRATIS VIA WA</span>
             </h3>
-            <p className="text-xs text-slate-400 mt-1">
-              Klik salah satu opsi di bawah ini untuk tersambung ke WhatsApp Admin
+            <p className="text-xs text-slate-300 mt-1">
+              Ada pertanyaan seputar emas syariah, kelas animasi, atau produk digital? Hubungi admin secara gratis.
             </p>
           </div>
 
@@ -72,26 +72,26 @@ export const CommunityBanner: React.FC<CommunityBannerProps> = ({ settings }) =>
             href={directWaUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full py-3.5 px-5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm flex items-center justify-center gap-3 transition-all transform hover:scale-[1.02] shadow-xl shadow-emerald-500/20"
+            className="w-full py-4 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm sm:text-base flex items-center justify-center gap-3 transition-all transform hover:scale-[1.02] shadow-xl shadow-emerald-500/25 border border-emerald-300"
           >
-            <MessageSquare className="w-5 h-5 fill-slate-950" />
-            <span>TANYA ADMIN SEKARANG</span>
-            <ArrowRight className="w-4 h-4 ml-auto" />
+            <MessageSquare className="w-6 h-6 fill-slate-950 text-slate-950 shrink-0" />
+            <span className="tracking-wide">TANYA WA & GRATIS KONSULTASI APA PUN</span>
+            <ArrowRight className="w-5 h-5 ml-auto shrink-0" />
           </a>
 
           <a
             href={groupUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full py-3.5 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-emerald-500/40 font-bold text-sm flex items-center justify-center gap-3 transition-all transform hover:scale-[1.02]"
+            className="w-full py-3.5 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-emerald-500/40 font-bold text-xs sm:text-sm flex items-center justify-center gap-3 transition-all transform hover:scale-[1.02]"
           >
-            <Users className="w-5 h-5 text-emerald-400" />
-            <span>GABUNG GRUP VIP SAHABAT</span>
-            <ArrowRight className="w-4 h-4 ml-auto text-slate-400" />
+            <Users className="w-5 h-5 text-emerald-400 shrink-0" />
+            <span>GABUNG GRUP VIP SAHABAT KAFA</span>
+            <ArrowRight className="w-4 h-4 ml-auto text-slate-400 shrink-0" />
           </a>
 
-          <p className="text-[11px] text-center text-slate-400 pt-1">
-            ⚡ Response time: ~3-10 menit di jam kerja
+          <p className="text-[11px] text-center text-slate-300 pt-1">
+            ⚡ Respon Cepat Admin: ~3-10 menit di jam kerja
           </p>
         </div>
       </div>

@@ -75,7 +75,7 @@ export const IslamicQuoteWidget: React.FC = () => {
   };
 
   return (
-    <div id="quote-generator" className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-900/90 via-slate-900 to-teal-950 dark:from-emerald-950/90 dark:via-slate-950 dark:to-slate-900 light:from-emerald-50 light:via-teal-50/80 light:to-white border border-emerald-500/30 dark:border-emerald-500/30 light:border-emerald-200 shadow-2xl overflow-hidden text-white dark:text-white light:text-slate-900">
+    <div id="quote-generator" className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-emerald-900/90 via-slate-900 to-teal-950 dark:from-emerald-950/90 dark:via-slate-950 dark:to-slate-900 border border-emerald-500/30 shadow-2xl overflow-hidden text-white">
       {/* Background Decorative Glow */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -83,32 +83,32 @@ export const IslamicQuoteWidget: React.FC = () => {
       <div className="relative z-10 space-y-5">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 dark:text-emerald-400 light:text-emerald-700 border border-emerald-500/30">
+            <span className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
               <Quote className="w-5 h-5" />
             </span>
             <div>
-              <h3 className="text-sm sm:text-base font-black tracking-wide text-white dark:text-white light:text-slate-900 flex items-center gap-2">
+              <h3 className="text-sm sm:text-base font-black tracking-wide text-white flex items-center gap-2">
                 <span>Mutiara Hikmah & Hadits Harian</span>
                 <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
               </h3>
-              <p className="text-[11px] text-emerald-200/80 dark:text-emerald-200/80 light:text-slate-600">
+              <p className="text-[11px] text-emerald-200/80">
                 Inspirasi & Pengingat Kebaikan Setiap Hari
               </p>
             </div>
           </div>
 
-          <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 dark:text-emerald-300 light:text-emerald-800 border border-emerald-500/30">
+          <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
             {currentQuote.category}
           </span>
         </div>
 
         {/* Quote Content Card */}
-        <div className="p-5 rounded-2xl bg-slate-900/60 dark:bg-slate-900/80 light:bg-white/90 border border-white/10 dark:border-white/10 light:border-slate-200/80 backdrop-blur-md space-y-3 shadow-inner">
-          <p className={`text-sm sm:text-base italic leading-relaxed font-medium transition-all duration-300 text-slate-100 dark:text-slate-100 light:text-slate-800 ${isRotating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+        <div className="p-5 rounded-2xl bg-slate-900/60 dark:bg-slate-900/80 border border-white/10 backdrop-blur-md space-y-3 shadow-inner">
+          <p className={`text-sm sm:text-base italic leading-relaxed font-medium transition-all duration-300 text-slate-100 ${isRotating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
             "{currentQuote.text}"
           </p>
-          <div className="flex items-center justify-between pt-2 border-t border-white/10 dark:border-white/10 light:border-slate-200">
-            <span className="text-xs font-bold text-amber-400 dark:text-amber-400 light:text-amber-700 flex items-center gap-1.5">
+          <div className="flex items-center justify-between pt-2 border-t border-white/10">
+            <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
               <BookOpen className="w-3.5 h-3.5" />
               {currentQuote.source}
             </span>
@@ -116,7 +116,7 @@ export const IslamicQuoteWidget: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={handleCopy}
-                className="p-2 rounded-xl bg-slate-800 dark:bg-slate-800 light:bg-slate-100 hover:bg-slate-700 light:hover:bg-slate-200 text-slate-200 dark:text-slate-200 light:text-slate-700 transition-all active:scale-90 text-xs flex items-center gap-1"
+                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all active:scale-90 text-xs flex items-center gap-1"
                 title="Salin Quote"
               >
                 {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}

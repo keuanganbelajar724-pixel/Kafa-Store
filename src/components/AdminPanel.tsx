@@ -85,7 +85,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   onResetData,
   onLogout,
 }) => {
-  const [activeTab, setActiveTab] = useState<'items' | 'hero' | 'freetools' | 'testimonials' | 'faq' | 'settings' | 'orders' | 'theme'>('items');
+  const [activeTab, setActiveTab] = useState<'items' | 'hero' | 'freetools' | 'testimonials' | 'faq' | 'settings' | 'theme'>('items');
 
   // ITEM Form State
   const [editingItem, setEditingItem] = useState<Partial<LinkItem> | null>(null);
@@ -501,18 +501,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           </button>
 
           <button
-            onClick={() => setActiveTab('orders')}
-            className={`px-3.5 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition-all ${
-              activeTab === 'orders'
-                ? 'bg-white dark:bg-slate-900 border-emerald-500 text-emerald-600 dark:text-emerald-400 shadow-sm'
-                : 'border-transparent text-slate-500 hover:text-white'
-            }`}
-          >
-            <Receipt className="w-4 h-4" />
-            <span>Log Pesanan ({orders.length})</span>
-          </button>
-
-          <button
             onClick={() => setActiveTab('theme')}
             className={`px-3.5 py-2.5 rounded-t-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 border-b-2 transition-all ${
               activeTab === 'theme'
@@ -720,52 +708,75 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                   />
                 </div>
 
-                {/* Edit Hero Stats Counters */}
+                {/* Edit Header & Running Ticker Bar */}
                 <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-3">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Edit 4 Kotak Angka Statistik (Hero Counters)
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                    Pengaturan Tulisan Header & Running Ticker Bar
                   </h4>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {(localSettings.stats && localSettings.stats.length === 4
-                      ? localSettings.stats
-                      : [
-                          { id: '1', value: '12,500+', label: 'Anggota Komunitas', color: 'emerald' },
-                          { id: '2', value: '1,400+', label: 'Alumni Kelas Animasi', color: 'amber' },
-                          { id: '3', value: '50+', label: 'Modul & E-book Digital', color: 'sky' },
-                          { id: '4', value: '99.4%', label: 'Tingkat Kepuasan', color: 'rose' },
-                        ]
-                    ).map((st, idx) => (
-                      <div key={idx} className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold text-emerald-500">Kotak #{idx + 1}</span>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          <input
-                            type="text"
-                            value={st.value}
-                            onChange={(e) => {
-                              const newStats = [...(localSettings.stats || [])];
-                              newStats[idx] = { ...st, value: e.target.value };
-                              setLocalSettings({ ...localSettings, stats: newStats });
-                            }}
-                            placeholder="Nilai (e.g. 15,000+)"
-                            className="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700"
-                          />
-                          <input
-                            type="text"
-                            value={st.label}
-                            onChange={(e) => {
-                              const newStats = [...(localSettings.stats || [])];
-                              newStats[idx] = { ...st, label: e.target.value };
-                              setLocalSettings({ ...localSettings, stats: newStats });
-                            }}
-                            placeholder="Label (e.g. Alumni)"
-                            className="px-2.5 py-1.5 rounded-lg text-xs bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700"
-                          />
-                        </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Teks Tombol WA di Header (Kanan Atas)
+                    </label>
+                    <input
+                      type="text"
+                      value={localSettings.headerWaText || ''}
+                      onChange={(e) => setLocalSettings({ ...localSettings, headerWaText: e.target.value })}
+                      placeholder="Contoh: Tanya WA Gratis"
+                      className="w-full px-3.5 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                      Tulisan Running Ticker Bar (Baris Berjalan di Atas Header)
+                    </label>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500">Ticker #1</span>
+                        <input
+                          type="text"
+                          value={localSettings.tickerItem1 || ''}
+                          onChange={(e) => setLocalSettings({ ...localSettings, tickerItem1: e.target.value })}
+                          placeholder="Sahabat Kafa — Platform Resmi"
+                          className="w-full px-3 py-1.5 rounded-lg text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+                        />
                       </div>
-                    ))}
+
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500">Ticker #2</span>
+                        <input
+                          type="text"
+                          value={localSettings.tickerItem2 || ''}
+                          onChange={(e) => setLocalSettings({ ...localSettings, tickerItem2: e.target.value })}
+                          placeholder="Layanan & Transaksi Terverifikasi"
+                          className="w-full px-3 py-1.5 rounded-lg text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+                        />
+                      </div>
+
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500">Ticker #3</span>
+                        <input
+                          type="text"
+                          value={localSettings.tickerItem3 || ''}
+                          onChange={(e) => setLocalSettings({ ...localSettings, tickerItem3: e.target.value })}
+                          placeholder="Akses Produk Digital & Pembelajaran"
+                          className="w-full px-3 py-1.5 rounded-lg text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+                        />
+                      </div>
+
+                      <div>
+                        <span className="text-[11px] font-semibold text-slate-500">Ticker #4</span>
+                        <input
+                          type="text"
+                          value={localSettings.tickerItem4 || ''}
+                          onChange={(e) => setLocalSettings({ ...localSettings, tickerItem4: e.target.value })}
+                          placeholder="Akses Digital 24/7"
+                          className="w-full px-3 py-1.5 rounded-lg text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1124,20 +1135,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                     <label className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer">
                       <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                        ⏰ Jam & Tanggal Live Interaktif
-                      </span>
-                      <input
-                        type="checkbox"
-                        checked={localSettings.showLiveClock !== false}
-                        onChange={(e) =>
-                          setLocalSettings({ ...localSettings, showLiveClock: e.target.checked })
-                        }
-                        className="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500"
-                      />
-                    </label>
-
-                    <label className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 cursor-pointer">
-                      <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
                         👥 Banner Komunitas & Tanya Admin
                       </span>
                       <input
@@ -1330,90 +1327,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 Simpan Setelan WhatsApp & Toko
               </button>
             </form>
-          )}
-
-          {/* TAB 5: ORDERS LOG & LEAD TRACKER */}
-          {activeTab === 'orders' && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between gap-2 flex-wrap">
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                    Log Masuk Pesanan & Lead WhatsApp
-                  </h3>
-                  <p className="text-xs text-slate-500">
-                    Riwayat pembeli yang melakukan checkout keranjang via WhatsApp.
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-extrabold">
-                    Omset Selesai: {formatRupiah(totalRevenue)}
-                  </div>
-
-                  {orders.length > 0 && (
-                    <button
-                      onClick={handleClearOrders}
-                      className="px-3 py-1.5 rounded-xl bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white text-xs font-bold transition-colors"
-                    >
-                      Bersihkan Log
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {orders.length === 0 ? (
-                <div className="p-12 text-center text-slate-500 bg-slate-50 dark:bg-slate-800/40 rounded-2xl border border-slate-200 dark:border-slate-800">
-                  <Receipt className="w-12 h-12 stroke-1 text-slate-400 mx-auto mb-2" />
-                  <p className="text-sm font-bold">Belum Ada Pesanan Masuk</p>
-                  <p className="text-xs text-slate-400 mt-1">
-                    Setiap kali pengunjung mengklik "Kirim Pesanan ke WhatsApp", data pesanan akan otomatis tercatat di sini.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3 pt-2">
-                  {orders.map((ord) => (
-                    <div
-                      key={ord.id}
-                      className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-                    >
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-black text-slate-900 dark:text-white">
-                            {ord.customerName}
-                          </span>
-                          <span className="text-[11px] font-mono font-semibold text-emerald-500">
-                            ({ord.customerPhone})
-                          </span>
-                          <span className="text-[10px] text-slate-400">• {ord.createdAt}</span>
-                        </div>
-
-                        <div className="text-xs text-slate-600 dark:text-slate-300">
-                          {ord.items.map((i) => `${i.quantity}x ${i.title}`).join(', ')}
-                        </div>
-
-                        <div className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">
-                          Total: {formatRupiah(ord.totalAmount)}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <select
-                          value={ord.status}
-                          onChange={(e) =>
-                            handleUpdateOrderStatus(ord.id, e.target.value as 'Pending WA' | 'Selesai' | 'Batal')
-                          }
-                          className="px-3 py-1.5 rounded-xl text-xs font-extrabold bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white"
-                        >
-                          <option value="Pending WA">Pending WA</option>
-                          <option value="Selesai">Selesai (Lunas)</option>
-                          <option value="Batal">Batal</option>
-                        </select>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
           )}
 
           {/* TAB 6: THEME & COLOR BACKGROUND */}
@@ -1696,20 +1609,21 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 />
               </div>
 
-              {editingItem.type !== 'product' && (
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    URL Tautan Tujuan (Direct Link)
-                  </label>
-                  <input
-                    type="text"
-                    value={editingItem.url || ''}
-                    onChange={(e) => setEditingItem({ ...editingItem, url: e.target.value })}
-                    placeholder="https://wa.me/..."
-                    className="w-full px-3.5 py-2 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white"
-                  />
-                </div>
-              )}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  🔗 URL Link Tujuan Redirect Beli (Contoh: https://link.id/produk atau https://wa.me/...)
+                </label>
+                <input
+                  type="text"
+                  value={editingItem.url || ''}
+                  onChange={(e) => setEditingItem({ ...editingItem, url: e.target.value })}
+                  placeholder="https://link.id/namaproduk"
+                  className="w-full px-3.5 py-2.5 rounded-xl text-xs bg-slate-50 dark:bg-slate-800 border border-emerald-500/40 text-slate-900 dark:text-white font-medium focus:ring-2 focus:ring-emerald-500"
+                />
+                <p className="text-[10px] text-slate-400 mt-1">
+                  *Jika diisi, saat pengunjung klik tombol Beli, otomatis akan langsung dialihkan ke link ini. Jika dikosongkan, akan dialihkan ke WhatsApp Admin.
+                </p>
+              </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">

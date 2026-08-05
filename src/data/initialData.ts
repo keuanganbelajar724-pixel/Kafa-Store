@@ -2,8 +2,13 @@ import { LinkItem, StoreSettings, Testimonial, FreeWebTool, FaqItem } from '../t
 
 export const INITIAL_SETTINGS: StoreSettings = {
   storeName: 'Sahabat Kafa',
-  tagline: 'Emas Syariah Semarang | Tahukah Kamu AI',
-  bio: 'Jual beli emas syariah Semarang (Bisa COD), kelas editing video & AI faceless, e-book edukasi anak, dan pengetahuan singkat berkah.',
+  tagline: 'Platform Digital & Layanan Pilihan',
+  headerWaText: 'Tanya WA Gratis',
+  tickerItem1: 'Sahabat Kafa — Platform Resmi',
+  tickerItem2: 'Layanan & Transaksi Terverifikasi',
+  tickerItem3: 'Akses Produk Digital & Pembelajaran',
+  tickerItem4: 'Akses Digital 24/7',
+  bio: 'Platform digital pilihan, menyediakan akses produk digital, modul edukasi, dan layanan terpercaya.',
   avatarUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&q=80&w=400',
   whatsappNumber: '6281234567890',
   whatsappMessageHeader: 'Assalamu\'alaikum Admin Sahabat Kafa, saya mau pesan/tanya tentang:',
@@ -174,3 +179,81 @@ export const INITIAL_TESTIMONIALS: Testimonial[] = [
 ];
 
 export const INITIAL_ITEMS: LinkItem[] = [];
+
+export const DEMO_ITEMS: LinkItem[] = [
+  {
+    id: 'item-1',
+    title: 'Jual Beli Emas Syariah Semarang (Bisa COD)',
+    subtitle: 'Layanan jual beli emas murni, antam, & UBS syariah di Semarang. Konsultasi & transaksi COD aman.',
+    type: 'product',
+    price: 0,
+    badge: 'EMAS SYARIAH',
+    badgeColor: 'amber',
+    category: 'Emas Syariah',
+    imageUrl: 'https://images.unsplash.com/photo-1610375461246-83df859d849d?auto=format&fit=crop&q=80&w=600',
+    description: 'Layanan transaksi emas syariah terpercaya di Semarang dan sekitarnya. Bebas riba dengan akad Wakalah / serah terima tunai (COD). Dapatkan harga buyback & jual yang kompetitif serta gratis konsultasi simpanan emas.',
+    isActive: true,
+    isPinned: true,
+    order: 1,
+    rating: 5.0,
+    salesCount: 850,
+    estimatedTime: 'Bisa COD Semarang & Sekitarnya',
+    features: [
+      'Bisa COD Langsung di Semarang & Sekitarnya',
+      'Akad Syariah Wakalah Sesuai Fatwa DSN-MUI',
+      'Pilihan Emas Antam, UBS, & Emas Murni Syariah',
+      'Gratis Konsultasi Nabung & Simpanan Emas'
+    ]
+  },
+  {
+    id: 'item-2',
+    title: 'Kelas Video Editing & Animasi AI Faceless',
+    subtitle: 'Panduan step-by-step membuat video animasi 2D/3D & konten AI tanpa wajah yang viral & berkah',
+    type: 'product',
+    price: 149000,
+    originalPrice: 299000,
+    badge: 'BEST SELLER',
+    badgeColor: 'emerald',
+    category: 'Kelas Animasi',
+    imageUrl: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600',
+    description: 'Panduan terlengkap bagi kamu yang ingin jadi content creator tanpa perlu tampil muka. Menggunakan tools animasi & AI modern yang mudah dipelajari bahkan untuk pemula tanpa latar belakang desain.',
+    isActive: true,
+    isPinned: true,
+    order: 2,
+    rating: 4.9,
+    salesCount: 1420,
+    estimatedTime: 'Akses Selamanya',
+    features: [
+      '25+ Video Tutorial Akses Selamanya',
+      'Bundle 100+ Asset Animasi & Sound FX',
+      'Mentoring Private via WhatsApp',
+      'Modul Monetisasi & Jualan Konten'
+    ]
+  },
+  {
+    id: 'item-3',
+    title: 'Perpustakaan Digital & E-book Sahabat Kafa',
+    subtitle: 'Akses puluhan ebook edukasi, panduan muamalah emas, & wawasan digital',
+    type: 'product',
+    price: 49000,
+    originalPrice: 99000,
+    badge: 'FAVORIT',
+    badgeColor: 'blue',
+    category: 'E-Book Digital',
+    imageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&q=80&w=600',
+    description: 'Koleksi e-book eksklusif seputar sains populer islami, tips pengasuhan anak era digital, riset bisnis syariah, dan sejarah peradaban Islam.',
+    isActive: true,
+    isPinned: true,
+    order: 3,
+    rating: 4.8,
+    salesCount: 2350,
+    estimatedTime: 'Instant Download',
+    features: [
+      '50+ E-book Format PDF HQ',
+      'Bisa Dibaca di Smartphone, Tablet, PC',
+      'Update Bebas Biaya Setiap Bulan',
+      'Panduan Praktis Muamalah Emas'
+    ]
+  }
+];
+

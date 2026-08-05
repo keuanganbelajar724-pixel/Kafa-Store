@@ -46,19 +46,19 @@ export const FreeToolsSection: React.FC<FreeToolsSectionProps> = ({
   const getColorClasses = (color: string) => {
     switch (color) {
       case 'emerald':
-        return 'from-emerald-500/20 to-teal-500/10 border-emerald-500/40 text-emerald-400 dark:text-emerald-300 light:text-emerald-800 bg-emerald-500/10';
+        return 'from-emerald-500/20 to-teal-500/10 border-emerald-500/40 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10';
       case 'amber':
-        return 'from-amber-500/20 to-orange-500/10 border-amber-500/40 text-amber-400 dark:text-amber-300 light:text-amber-800 bg-amber-500/10';
+        return 'from-amber-500/20 to-orange-500/10 border-amber-500/40 text-amber-700 dark:text-amber-300 bg-amber-500/10';
       case 'sky':
-        return 'from-sky-500/20 to-blue-500/10 border-sky-500/40 text-sky-400 dark:text-sky-300 light:text-sky-800 bg-sky-500/10';
+        return 'from-sky-500/20 to-blue-500/10 border-sky-500/40 text-sky-700 dark:text-sky-300 bg-sky-500/10';
       case 'rose':
-        return 'from-rose-500/20 to-pink-500/10 border-rose-500/40 text-rose-400 dark:text-rose-300 light:text-rose-800 bg-rose-500/10';
+        return 'from-rose-500/20 to-pink-500/10 border-rose-500/40 text-rose-700 dark:text-rose-300 bg-rose-500/10';
       case 'indigo':
-        return 'from-indigo-500/20 to-purple-500/10 border-indigo-500/40 text-indigo-400 dark:text-indigo-300 light:text-indigo-800 bg-indigo-500/10';
+        return 'from-indigo-500/20 to-purple-500/10 border-indigo-500/40 text-indigo-700 dark:text-indigo-300 bg-indigo-500/10';
       case 'violet':
-        return 'from-violet-500/20 to-purple-500/10 border-violet-500/40 text-violet-400 dark:text-violet-300 light:text-violet-800 bg-violet-500/10';
+        return 'from-violet-500/20 to-purple-500/10 border-violet-500/40 text-violet-700 dark:text-violet-300 bg-violet-500/10';
       default:
-        return 'from-slate-500/20 to-slate-600/10 border-slate-500/40 text-emerald-400 bg-slate-500/10';
+        return 'from-slate-500/20 to-slate-600/10 border-slate-500/40 text-emerald-600 dark:text-emerald-400 bg-slate-500/10';
     }
   };
 
@@ -107,7 +107,7 @@ export const FreeToolsSection: React.FC<FreeToolsSectionProps> = ({
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all active:scale-95 ${
                 isActive
                   ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/30 scale-105'
-                  : 'bg-slate-200/80 dark:bg-slate-800/80 light:bg-slate-200 text-slate-700 dark:text-slate-300 light:text-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700'
+                  : 'bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
               {cat}
@@ -124,7 +124,7 @@ export const FreeToolsSection: React.FC<FreeToolsSectionProps> = ({
             <div
               key={tool.id}
               onClick={() => handleToolClick(tool)}
-              className={`group relative p-5 rounded-3xl bg-gradient-to-br ${colorClass} bg-white dark:bg-slate-900/90 light:bg-white border hover:border-emerald-500/60 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between overflow-hidden`}
+              className={`group relative p-5 rounded-3xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-emerald-500/60 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer flex flex-col justify-between overflow-hidden`}
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -132,24 +132,24 @@ export const FreeToolsSection: React.FC<FreeToolsSectionProps> = ({
                     {getIcon(tool.icon)}
                   </div>
                   {tool.badge && (
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 light:text-emerald-800 border border-emerald-500/30">
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
                       {tool.badge}
                     </span>
                   )}
                 </div>
 
                 <div>
-                  <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white light:text-slate-900 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
+                  <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors flex items-center gap-1.5">
                     <span>{tool.title}</span>
                   </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-300 light:text-slate-600 mt-1 line-clamp-2 leading-relaxed">
+                  <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 line-clamp-2 leading-relaxed">
                     {tool.description}
                   </p>
                 </div>
               </div>
 
-              <div className="pt-4 mt-3 border-t border-slate-200/60 dark:border-slate-800 light:border-slate-200 flex items-center justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400 light:text-emerald-700">
-                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 light:text-slate-500">
+              <div className="pt-4 mt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
                   {tool.category}
                 </span>
                 <span className="inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">

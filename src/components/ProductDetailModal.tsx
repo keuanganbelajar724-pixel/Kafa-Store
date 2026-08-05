@@ -125,42 +125,25 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="p-4 bg-slate-950 border-t border-slate-800 flex flex-col sm:flex-row items-center gap-2.5 shrink-0">
-          <div className="flex items-center gap-2 w-full">
-            <button
-              onClick={() => {
-                onAddToCart(item);
-                onClose();
-              }}
-              className="flex-1 py-3 px-3 rounded-xl text-xs font-bold bg-slate-800 text-slate-200 hover:bg-slate-700 transition-colors flex items-center justify-center gap-1.5 border border-slate-700"
-            >
-              <ShoppingBag className="w-4 h-4" />
-              <span>+ Keranjang</span>
-            </button>
-
-            <button
-              onClick={() => {
+        <div className="p-4 bg-slate-950 border-t border-slate-800 flex flex-col items-center gap-2.5 shrink-0">
+          <button
+            onClick={() => {
+              if (item.url && item.url.trim().length > 0) {
+                let targetUrl = item.url.trim();
+                if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+                  targetUrl = 'https://' + targetUrl;
+                }
+                window.open(targetUrl, '_blank', 'noopener,noreferrer');
+              } else {
                 onBuyNow(item);
-                onClose();
-              }}
-              className="flex-1 py-3 px-3 rounded-xl text-xs font-extrabold bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white transition-all flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-600/30"
-            >
-              <Zap className="w-4 h-4" />
-              <span>Pesan / Checkout WA</span>
-            </button>
-          </div>
-
-          {item.url && (
-            <a
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-2.5 px-3 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-emerald-400 border border-emerald-500/30 transition-all flex items-center justify-center gap-1.5"
-            >
-              <span>Akses Link Website / Produk</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          )}
+              }
+              onClose();
+            }}
+            className="w-full py-3.5 px-4 rounded-xl text-sm font-black bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25"
+          >
+            <span>BELI SEKARANG / AKSES LINK SEKARANG</span>
+            <ExternalLink className="w-4 h-4 text-slate-950" />
+          </button>
         </div>
       </div>
     </div>

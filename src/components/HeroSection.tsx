@@ -2,7 +2,6 @@ import React from 'react';
 import { Sparkles, ShieldCheck, Zap, Star, Share2, MessageCircle } from 'lucide-react';
 import { StoreSettings } from '../types';
 import { MosqueAmbientBackground } from './MosqueAmbientBackground';
-import { LiveClockWidget } from './LiveClockWidget';
 
 interface HeroSectionProps {
   settings: StoreSettings;
@@ -36,9 +35,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
         </div>
 
-        {/* Live Interactive Date & Digital Clock Widget */}
-        {settings.showLiveClock !== false && <LiveClockWidget />}
-
         {/* Main Headline */}
         <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white leading-[1.15] max-w-3xl mx-auto drop-shadow-sm">
           {settings.heroHeadline || settings.storeName}
@@ -49,32 +45,33 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {settings.heroSubheadline || settings.bio}
         </p>
 
-        {/* Action Triggers */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <a
-            href="#katalog"
-            className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs sm:text-sm shadow-xl shadow-emerald-600/30 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2"
-          >
-            <Sparkles className="w-4 h-4 text-amber-300" />
-            <span>Lihat Produk & E-Book</span>
-          </a>
-
+        {/* Prominent Action Triggers with Big WA Consultation CTA */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
+          {/* Big Clear WA Consultation Button */}
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-5 py-3.5 rounded-2xl bg-emerald-500/10 dark:bg-emerald-950/60 border border-emerald-500/40 text-emerald-800 dark:text-emerald-300 font-extrabold text-xs sm:text-sm hover:bg-emerald-500/20 hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shadow-sm"
+            className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm sm:text-base shadow-xl shadow-emerald-500/25 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 border border-emerald-300"
           >
-            <MessageCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span>Konsultasi & COD WA</span>
+            <MessageCircle className="w-6 h-6 fill-slate-950 text-emerald-400" />
+            <span>TANYA WA & GRATIS KONSULTASI APA PUN</span>
+          </a>
+
+          <a
+            href="#katalog"
+            className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs sm:text-sm border border-slate-700 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
+          >
+            <Sparkles className="w-4 h-4 text-amber-300" />
+            <span>Lihat Semua Produk</span>
           </a>
 
           <button
             onClick={onOpenShare}
-            className="px-4 py-3.5 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-slate-800 dark:text-slate-300 font-bold text-xs sm:text-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2 shadow-sm"
+            className="w-full sm:w-auto px-4 py-4 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-700/80 text-slate-800 dark:text-slate-300 font-bold text-xs sm:text-sm hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-sm"
           >
             <Share2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-            <span>Bagikan Website</span>
+            <span>Bagikan</span>
           </button>
         </div>
 
@@ -96,34 +93,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Category Filter Navigation */}
-        <div id="katalog" className="pt-6 max-w-2xl mx-auto space-y-3 scroll-mt-20">
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar justify-start sm:justify-center">
-            <button
-              onClick={() => onSelectCategory('Semua')}
-              className={`px-4 py-2.5 rounded-xl text-xs font-extrabold whitespace-nowrap transition-all duration-200 border ${
-                selectedCategory === 'Semua'
-                  ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-emerald-500 shadow-lg shadow-emerald-600/30 scale-105'
-                  : 'bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:text-slate-900 dark:hover:text-white'
-              }`}
-            >
-              Semua Katalog ({totalProductsCount})
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => onSelectCategory(cat)}
-                className={`px-4 py-2.5 rounded-xl text-xs font-extrabold whitespace-nowrap transition-all duration-200 border ${
-                  selectedCategory === cat
-                    ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white border-emerald-500 shadow-lg shadow-emerald-600/30 scale-105'
-                    : 'bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:text-slate-900 dark:hover:text-white'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* Scroll anchor target */}
+        <div id="katalog" className="pt-2 scroll-mt-20" />
       </div>
     </div>
   );
