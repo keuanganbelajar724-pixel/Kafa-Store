@@ -1,0 +1,45 @@
+{
+  "entities": {
+    "products": {
+      "title": "Products & Services Catalog",
+      "description": "Digital products, video editing classes, ebooks, and sharia gold COD services",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "type": { "type": "string" },
+        "price": { "type": "number" },
+        "originalPrice": { "type": "number" },
+        "badge": { "type": "string" },
+        "badgeColor": { "type": "string" },
+        "category": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "description": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "isPinned": { "type": "boolean" },
+        "order": { "type": "number" },
+        "rating": { "type": "number" },
+        "salesCount": { "type": "number" },
+        "estimatedTime": { "type": "string" },
+        "features": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "title", "price", "category", "isActive"]
+    },
+    "settings": {
+      "title": "Store Global Settings",
+      "description": "Store branding, WhatsApp numbers, theme settings, hero content, stats",
+      "type": "object"
+    },
+    "testimonials": {
+      "title": "Customer Testimonials",
+      "description": "Reviews and feedback from Sahabat Kafa buyers",
+      "type": "object"
+    },
+    "orders": {
+      "title": "Customer Orders Log",
+      "description": "Logs of checkout requests created by customers",
+      "type": "object"
+    }
+  }
+}
