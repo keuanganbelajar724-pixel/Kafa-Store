@@ -3,12 +3,12 @@ import {
   getFirestore,
   collection,
   doc,
+  getDoc,
   getDocs,
   setDoc,
   onSnapshot,
   writeBatch,
   query,
-  orderBy,
   deleteDoc,
   addDoc
 } from 'firebase/firestore';
@@ -30,12 +30,19 @@ export const db = firebaseConfig.firestoreDatabaseId
   ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
   : getFirestore(app);
 
-// Seed initial data to Firestore if collection is empty
+// Seed initial data to Firestore if collection is empty and store has not been initialized
 export async function seedInitialFirestoreData() {
   try {
+    const settingsDoc = await getDoc(doc(db, 'settings', 'global'));
+    // If settings document already exists, the database is initialized. Don't re-seed!
+    if (settingsDoc.exists()) {
+      return;
+    }
+
+    console.log('First-time setup: Seeding initial data to Firestore...');
+
     const productsSnap = await getDocs(collection(db, 'products'));
     if (productsSnap.empty) {
-      console.log('Seeding initial products to Firestore...');
       const batch = writeBatch(db);
       INITIAL_ITEMS.forEach((item) => {
         const ref = doc(db, 'products', item.id);
@@ -44,15 +51,10 @@ export async function seedInitialFirestoreData() {
       await batch.commit();
     }
 
-    const settingsSnap = await getDocs(collection(db, 'settings'));
-    if (settingsSnap.empty) {
-      console.log('Seeding initial store settings to Firestore...');
-      await setDoc(doc(db, 'settings', 'global'), INITIAL_SETTINGS);
-    }
+    await setDoc(doc(db, 'settings', 'global'), INITIAL_SETTINGS);
 
     const testimonialsSnap = await getDocs(collection(db, 'testimonials'));
     if (testimonialsSnap.empty) {
-      console.log('Seeding initial testimonials to Firestore...');
       const batch = writeBatch(db);
       INITIAL_TESTIMONIALS.forEach((testi) => {
         const ref = doc(db, 'testimonials', testi.id);
@@ -63,7 +65,6 @@ export async function seedInitialFirestoreData() {
 
     const freeToolsSnap = await getDocs(collection(db, 'freeTools'));
     if (freeToolsSnap.empty) {
-      console.log('Seeding initial free tools to Firestore...');
       const batch = writeBatch(db);
       INITIAL_FREE_TOOLS.forEach((tool) => {
         const ref = doc(db, 'freeTools', tool.id);
@@ -74,7 +75,6 @@ export async function seedInitialFirestoreData() {
 
     const faqsSnap = await getDocs(collection(db, 'faqs'));
     if (faqsSnap.empty) {
-      console.log('Seeding initial faqs to Firestore...');
       const batch = writeBatch(db);
       INITIAL_FAQS.forEach((faq) => {
         const ref = doc(db, 'faqs', faq.id);
@@ -141,6 +141,38 @@ export function subscribeFaqs(callback: (faqs: FaqItem[]) => void) {
       console.warn('Firestore faqs subscription error:', error);
     }
   );
+}
+
+// Save Products to Firestore
+export async function saveProductsToFirestore(products: LinkItem[]) {
+  try {
+    const existingSnap = await getDocs(collection(db, 'products'));
+    const batch = writeBatch(db);
+    existingSnap.docs.forEach((docSnap) => batch.delete(docSnap.ref));
+    products.forEach((prod) => {
+      const ref = doc(db, 'products', prod.id);
+      batch.set(ref, prod);
+    });
+    await batch.commit();
+  } catch (err) {
+    console.error('Failed to save products to Firestore:', err);
+  }
+}
+
+// Save Free Tools to Firestore
+export async function saveFreeToolsToFirestore(tools: FreeWebTool[]) {
+  try {
+    const existingSnap = await getDocs(collection(db, 'freeTools'));
+    const batch = writeBatch(db);
+    existingSnap.docs.forEach((docSnap) => batch.delete(docSnap.ref));
+    tools.forEach((tool) => {
+      const ref = doc(db, 'freeTools', tool.id);
+      batch.set(ref, tool);
+    });
+    await batch.commit();
+  } catch (err) {
+    console.error('Failed to save free tools to Firestore:', err);
+  }
 }
 
 // Save Testimonials to Firestore

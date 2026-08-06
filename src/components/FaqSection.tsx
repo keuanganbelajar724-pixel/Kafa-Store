@@ -9,7 +9,7 @@ interface FaqSectionProps {
 }
 
 export const FaqSection: React.FC<FaqSectionProps> = ({ faqs, whatsappNumber }) => {
-  const faqList = faqs && faqs.length > 0 ? faqs : INITIAL_FAQS;
+  const faqList = faqs !== undefined ? faqs : INITIAL_FAQS;
   const [openId, setOpenId] = useState<string | null>(faqList[0]?.id || null);
 
   const cleanWa = (whatsappNumber || '6281234567890').replace(/[^0-9]/g, '');
@@ -34,33 +34,39 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ faqs, whatsappNumber }) 
 
         {/* Accordion FAQ List */}
         <div className="space-y-3">
-          {faqList.map((faq) => {
-            const isOpen = openId === faq.id;
-            return (
-              <div
-                key={faq.id}
-                className="rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 overflow-hidden transition-all"
-              >
-                <button
-                  onClick={() => setOpenId(isOpen ? null : faq.id)}
-                  className="w-full px-5 py-4 text-left flex items-center justify-between gap-3 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
+          {faqList.length > 0 ? (
+            faqList.map((faq) => {
+              const isOpen = openId === faq.id;
+              return (
+                <div
+                  key={faq.id}
+                  className="rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/60 overflow-hidden transition-all"
                 >
-                  <span className="text-sm font-bold text-slate-900 dark:text-white leading-snug">{faq.question}</span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 transition-transform duration-200 ${
-                      isOpen ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
+                  <button
+                    onClick={() => setOpenId(isOpen ? null : faq.id)}
+                    className="w-full px-5 py-4 text-left flex items-center justify-between gap-3 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors"
+                  >
+                    <span className="text-sm font-bold text-slate-900 dark:text-white leading-snug">{faq.question}</span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 transition-transform duration-200 ${
+                        isOpen ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
 
-                {isOpen && (
-                  <div className="px-5 pb-4 pt-1 text-xs text-slate-700 dark:text-slate-300 leading-relaxed border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/40 whitespace-pre-line">
-                    {faq.answer}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  {isOpen && (
+                    <div className="px-5 pb-4 pt-1 text-xs text-slate-700 dark:text-slate-300 leading-relaxed border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/40 whitespace-pre-line">
+                      {faq.answer}
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          ) : (
+            <div className="text-center py-8 px-4 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/60 text-xs text-slate-500 dark:text-slate-400">
+              Belum ada daftar FAQ. Silakan tambahkan pertanyaan baru melalui Panel Admin atau hubungi Admin WA!
+            </div>
+          )}
         </div>
 
         {/* Direct Ask Admin Footer */}

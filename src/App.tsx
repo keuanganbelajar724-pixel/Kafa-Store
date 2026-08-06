@@ -45,7 +45,8 @@ import {
   subscribeSettings,
   subscribeTestimonials,
   subscribeFaqs,
-  saveProductToFirestore,
+  saveProductsToFirestore,
+  saveFreeToolsToFirestore,
   saveSettingsToFirestore,
   saveTestimonialsToFirestore,
   saveFaqsToFirestore,
@@ -145,7 +146,7 @@ export default function App() {
 
     // Subscribe to real-time products
     const unsubProducts = subscribeProducts((firestoreProducts) => {
-      if (firestoreProducts && firestoreProducts.length > 0) {
+      if (firestoreProducts) {
         setItems(firestoreProducts);
       }
     });
@@ -166,7 +167,7 @@ export default function App() {
 
     // Subscribe to real-time FAQs
     const unsubFaqs = subscribeFaqs((firestoreFaqs) => {
-      if (firestoreFaqs && firestoreFaqs.length > 0) {
+      if (firestoreFaqs) {
         setFaqs(firestoreFaqs);
       }
     });
@@ -189,7 +190,7 @@ export default function App() {
   const handleSaveItems = (newItems: LinkItem[]) => {
     setItems(newItems);
     saveStoredItems(newItems);
-    newItems.forEach((item) => saveProductToFirestore(item));
+    saveProductsToFirestore(newItems);
   };
 
   const handleSaveTestimonials = (newTestis: Testimonial[]) => {
@@ -212,6 +213,7 @@ export default function App() {
   const handleSaveFreeTools = (newTools: FreeWebTool[]) => {
     setFreeTools(newTools);
     saveStoredFreeTools(newTools);
+    saveFreeToolsToFirestore(newTools);
   };
 
   const handleResetData = () => {
